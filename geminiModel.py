@@ -35,13 +35,15 @@ class model:
                         genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
                     model = genai.GenerativeModel("gemini-1.5-flash")
                     response = model.generate_content(user_question)
-                    return response.text
+                    return f"[Gemini Model] {response.text}"
                 else:
-                    return response["output_text"]
+                    return f"[Data File] {response['output_text']}"
             else:
-                general_model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
-                general_response = general_model(user_question=user_question)
-                return general_response
+                if os.getenv("GOOGLE_API_KEY"):
+                    genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+                model = genai.GenerativeModel("gemini-1.5-flash")
+                response = model.generate_content(user_question)
+                return f"[Gemini Model] {response.text}"
 
         except Exception as e:
             print(f"Error processing user input: {e}")
